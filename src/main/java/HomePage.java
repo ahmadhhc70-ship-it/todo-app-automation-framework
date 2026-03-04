@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,10 +18,9 @@ public class HomePage extends basePage {
     By LogoutButtonLocator = By.xpath("//span[text()='Logout']");
     By todoNameFieldLocator = By.cssSelector("input[data-testid='new-todo']");
     By createTodoButtonLocator = By.cssSelector("button[data-testid='submit-newTask']");
-    By AddNewTodoButton = By.xpath("(//button[@aria-label='delete'])[1]");
-    By firstDoneCheckBoxLocator =  By.xpath("(//input[@data-testid='complete-task'])[1]");
-    By firstTodoLocator = By.xpath("(//h2[@data-testid='todo-text'])[1]");
-    By DeleteButton  = By.xpath("(//button[@data-testid='delete'])[1]");
+    By markCheckBoxLocator =  By.cssSelector("input[data-testid='complete-task");
+    By todoNameLocator = By.cssSelector("[data-testid='todo-text']");
+    By deleteNameLocator = By.cssSelector( "[data-testid='delete']");
 
 
 
@@ -40,11 +40,46 @@ public class HomePage extends basePage {
            }else {
                todoTitleField.sendKeys(todoTitle);
            }
+           }
+
+          public void addNewTodoName(String TodoName ){
+        driver.findElement(createTodoButtonLocator).click();
 
 
            }
+           public void markCheckBoxLocator(){
+             driver.findElement(markCheckBoxLocator).click();
+
+           }
+
+           public boolean CheckAddTodoName(String x) {
+            WebElement NewTodoTittle= wait.until(ExpectedConditions.visibilityOfElementLocated(todoNameLocator));
+               if (NewTodoTittle==null){
+                   return false;}
+               else{
+                   return x.equals(NewTodoTittle.getText());
+               }
+
+               }
 
 
+
+    public boolean checkTaskIsDeleted(String todoTitle){
+
+
+        String staticPart1= "//h2[text()='";
+        String staticPart2= "']";
+
+        String xpathLocator = staticPart1 + todoTitle + staticPart2;
+
+try {
+    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(xpathLocator)));
+    return true;
+
+}catch (NoSuchElementException X ) {
+
+    return false;
+}
+}
 
    }
-
